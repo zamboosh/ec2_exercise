@@ -1,0 +1,10 @@
+{% extends "base.html" %} {% block content %}
+<h1 class="title">Welcome, {{ name }}!</h1>
+
+{% for id, preferences in instances.items() %}
+<p>EC2 Instance: {{ id }}</p>
+{% for key, value in preferences.items() %}
+<p>{{ key }}: {{ value }}</p>
+{% endfor %}
+<br />
+{% endfor %} {% endblock %}
