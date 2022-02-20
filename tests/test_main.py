@@ -1,9 +1,14 @@
-from project.main import SessionCreator, ProcessInstanceData, ServerDisplayer
+import boto3
+from project.main import SessionCreator, ProcessInstanceData, PlatformDetails
 
 
 # SessionCreator Tests
 def test_session_construction():
     assert SessionCreator()
+
+
+def test_session_construction_params():
+    assert SessionCreator(boto3.client('ec2'))
 
 
 def test_extract_all_regions():
@@ -33,13 +38,12 @@ def test_processor_construction():
 
 def test_extract_data():
     session = SessionCreator()
-    preferences = ['VpcId', 'ImageId', 'InstanceType']
-    processor = ProcessInstanceData(session.create_session(), preferences)
+    processor = ProcessInstanceData(session.create_session())
     result = processor.extract_data()
     is_exists = False
     for key, item in result.items():
         for k, v in item.items():
-            if k == 'InstanceType' and v == 't2.micro':
+            if k == 'PlatformDetails' and type(v) == PlatformDetails:
                 is_exists = True
                 break
         assert is_exists
